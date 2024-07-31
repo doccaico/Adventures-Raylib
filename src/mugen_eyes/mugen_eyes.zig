@@ -101,54 +101,51 @@ const ParticleEmitter = struct {
 
 pub fn run() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    const allocator = if (builtin.mode == .Debug)
-            gpa.allocator()
-        else
-            std.heap.c_allocator;
-        defer if (builtin.mode == .Debug) std.debug.assert(gpa.deinit() == .ok);
+    const allocator = if (builtin.mode == .Debug) gpa.allocator() else std.heap.c_allocator;
+    defer if (builtin.mode == .Debug) std.debug.assert(gpa.deinit() == .ok);
 
-        var prng = std.Random.DefaultPrng.init(blk: {
-            var seed: u64 = undefined;
-            try std.posix.getrandom(std.mem.asBytes(&seed));
-            break :blk seed;
-        });
-        rand = prng.random();
+    var prng = std.Random.DefaultPrng.init(blk: {
+        var seed: u64 = undefined;
+        try std.posix.getrandom(std.mem.asBytes(&seed));
+        break :blk seed;
+    });
+    rand = prng.random();
 
-        var emitters = try lib.CircularBuffer(ParticleEmitter, circularBufferSize).init(allocator);
-        defer {
-            for (0..emitters.len) |i| {
-                allocator.free(emitters.data[i].wheel_house);
+    var emitters = try lib.CircularBuffer(ParticleEmitter, circularBufferSize).init(allocator);
+    defer {
+        for (0..emitters.len) |i| {
+            allocator.free(emitters.data[i].wheel_house);
+        }
+        emitters.deinit();
+    }
+
+    rl.InitWindow(screenWidth, screenHeight, screenTitle);
+    defer rl.CloseWindow();
+
+    rl.SetTargetFPS(fps);
+
+    while (!rl.WindowShouldClose()) {
+        if (rl.IsMouseButtonDown(rl.MOUSE_BUTTON_LEFT)) {
+            const cursor_pos = rl.GetMousePosition();
+            emitters.append(try ParticleEmitter.init(allocator, cursor_pos, 50, 100));
+            if (emitters.isolated) |isolated| {
+                allocator.free(isolated.wheel_house);
             }
-            emitters.deinit();
         }
 
-        rl.InitWindow(screenWidth, screenHeight, screenTitle);
-        defer rl.CloseWindow();
+        {
+            rl.BeginDrawing();
+            defer rl.EndDrawing();
 
-        rl.SetTargetFPS(fps);
-
-        while (!rl.WindowShouldClose()) {
-            if (rl.IsMouseButtonDown(rl.MOUSE_BUTTON_LEFT)) {
-                const cursor_pos = rl.GetMousePosition();
-                emitters.append(try ParticleEmitter.init(allocator, cursor_pos, 50, 100));
-                if (emitters.isolated) |isolated| {
-                    allocator.free(isolated.wheel_house);
-                }
-            }
-
-            {
-                rl.BeginDrawing();
-                defer rl.EndDrawing();
-
-                rl.ClearBackground(rl.WHITE);
-
-                for (0..emitters.len) |i| {
-                    emitters.data[i].draw();
-                }
-            }
+            rl.ClearBackground(rl.WHITE);
 
             for (0..emitters.len) |i| {
-                emitters.data[i].step();
+                emitters.data[i].draw();
             }
         }
+
+        for (0..emitters.len) |i| {
+            emitters.data[i].step();
+        }
+    }
 }
