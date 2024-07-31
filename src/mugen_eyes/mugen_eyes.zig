@@ -102,7 +102,7 @@ const ParticleEmitter = struct {
 pub fn run() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     const allocator = if (builtin.mode == .Debug)
-        gpa.allocator()
+            gpa.allocator()
         else
             std.heap.c_allocator;
         defer if (builtin.mode == .Debug) std.debug.assert(gpa.deinit() == .ok);
