@@ -6,11 +6,11 @@ const rl = @cImport({
 });
 
 
-pub const screenTitle = "Atsu Grains";
-pub const screenWidth = 480;
-pub const screenHeight = 640;
-pub const fps = 30;
-pub const particleCount = 100_000;
+const screenTitle = "Atsu Grains";
+const screenWidth = 480;
+const screenHeight = 640;
+const fps = 30;
+const particleCount = 100_000;
 
 
 var rand: std.Random = undefined;
