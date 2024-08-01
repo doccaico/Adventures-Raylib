@@ -65,8 +65,8 @@ const ParticleHandler = struct {
                     .rock => rockColor,
                 };
                 rl.DrawRectangle(
-                    @intCast(i*cellSide),
-                    @intCast(j*cellSide),
+                    @intCast(i * cellSide),
+                    @intCast(j * cellSide),
                     cellSide,
                     cellSide,
                     color);
