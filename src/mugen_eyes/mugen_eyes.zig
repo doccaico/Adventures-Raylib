@@ -99,6 +99,9 @@ const ParticleEmitter = struct {
 
 };
 
+// Reference: https://github.com/doccaico/raylib-examples-odin/blob/main/particle.odin
+// Original: https://github.com/epsilon-phase/raylib-experiments/blob/canon/src/particle/main.c
+
 pub fn run() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     const allocator = if (builtin.mode == .Debug) gpa.allocator() else std.heap.c_allocator;
