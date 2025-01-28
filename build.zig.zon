@@ -4,8 +4,8 @@
     //.minimum_zig_version = "0.11.0",
     .dependencies = .{
         .raylib = .{
-            .url = "https://github.com/raysan5/raylib/archive/9e39788e077f1d35c5fe54600f2143423a80bb3d.tar.gz",
-            .hash = "122051da01fbb000a51f6e03bba5b4177667d374c87720c9a353b1e270c60e118055",
+            .url = "https://github.com/raysan5/raylib/archive/refs/heads/master.tar.gz",
+            .hash = "12208d70362a450a22ee21118abe339c063c7ac921bc6e1296ccb495385ea05f25e4",
         },
     },
     .paths = .{
@@ -14,6 +14,6 @@
         "src",
         // For example...
         //"LICENSE",
-        //"README.md",
+        // "README.md",
     },
 }

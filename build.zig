@@ -211,7 +211,7 @@ pub fn build(b: *std.Build) void {
     exe.addIncludePath(raylib_dep.path("src"));
 
     const raylib = raylib_dep.artifact("raylib");
-    define_macros(&raylib.root_module);
+    define_macros(raylib.root_module);
     exe.linkLibrary(raylib);
 
     const run_cmd = b.addRunArtifact(exe);
