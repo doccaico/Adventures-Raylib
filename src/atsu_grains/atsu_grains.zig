@@ -5,13 +5,11 @@ const rl = @cImport({
     @cInclude("raylib.h");
 });
 
-
 const screenTitle = "Atsu Grains";
 const screenWidth = 480;
 const screenHeight = 640;
 const fps = 30;
 const particleCount = 100_000;
-
 
 var rand: std.Random = undefined;
 
@@ -26,7 +24,7 @@ const Particle = struct {
         return .{
             .position = .{
                 .x = @floatFromInt(rand.uintLessThan(usize, screenWidth)),
-                .y = @floatFromInt(rand.uintLessThan(usize, screenHeight)), 
+                .y = @floatFromInt(rand.uintLessThan(usize, screenHeight)),
             },
             .velocity = .{
                 .x = @as(f32, @floatFromInt(rand.intRangeLessThan(i32, -100, 100))) / 100.0,
@@ -43,9 +41,9 @@ const Particle = struct {
     }
 
     fn getDist(self: Self, otherPos: rl.Vector2) f32 {
-        const dx =self.position.x - otherPos.x;
-        const dy =self.position.y - otherPos.y;
-        return std.math.sqrt((dx*dx) + (dy*dy));
+        const dx = self.position.x - otherPos.x;
+        const dy = self.position.y - otherPos.y;
+        return std.math.sqrt((dx * dx) + (dy * dy));
     }
 
     fn getNormal(self: Self, otherPos: rl.Vector2) rl.Vector2 {
@@ -53,7 +51,7 @@ const Particle = struct {
         if (dist == 0.0) dist = 1;
         const dx = self.position.x - otherPos.x;
         const dy = self.position.y - otherPos.y;
-        const normal = .{.x = dx*(1/dist), .y = dy*(1/dist)};
+        const normal = .{ .x = dx * (1 / dist), .y = dy * (1 / dist) };
         return normal;
     }
 

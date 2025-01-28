@@ -9,7 +9,6 @@ const rl = @cImport({
     @cInclude("raymath.h");
 });
 
-
 pub const screenTitle = "Mugen Eyes";
 pub const screenWidth = 480;
 pub const screenHeight = 640;
@@ -18,14 +17,13 @@ pub const circularBufferSize = 150;
 pub const particleMaxSize = 20;
 pub const particleMaxSpeed = 4.0;
 
-
 var rand: std.Random = undefined;
 
 const colors = [_]rl.Color{
-    .{ .r = 255, .g = 0,   .b = 0,   .a = 255 }, // Red
-    .{ .r = 0,   .g = 255, .b = 0,   .a = 255 }, // Green
-    .{ .r = 0,   .g = 0,   .b = 255, .a = 255 }, // Blue
-    .{ .r = 55,  .g = 55,  .b = 55,  .a = 255 }, // Darkish gray
+    .{ .r = 255, .g = 0, .b = 0, .a = 255 }, // Red
+    .{ .r = 0, .g = 255, .b = 0, .a = 255 }, // Green
+    .{ .r = 0, .g = 0, .b = 255, .a = 255 }, // Blue
+    .{ .r = 55, .g = 55, .b = 55, .a = 255 }, // Darkish gray
 };
 
 const Particle = struct {
@@ -59,18 +57,10 @@ const ParticleEmitter = struct {
     }
 
     fn draw(self: Self) void {
-        rl.DrawCircle(
-            @intFromFloat(self.position.x),
-            @intFromFloat(self.position.y),
-            3.0,
-            rl.BLACK);
+        rl.DrawCircle(@intFromFloat(self.position.x), @intFromFloat(self.position.y), 3.0, rl.BLACK);
 
         for (0..self.particle_count) |i| {
-            rl.DrawCircle(
-                @intFromFloat(self.wheel_house[i].position.x),
-                @intFromFloat(self.wheel_house[i].position.y),
-                self.wheel_house[i].size,
-                self.wheel_house[i].color);
+            rl.DrawCircle(@intFromFloat(self.wheel_house[i].position.x), @intFromFloat(self.wheel_house[i].position.y), self.wheel_house[i].size, self.wheel_house[i].color);
         }
     }
 
@@ -91,12 +81,8 @@ const ParticleEmitter = struct {
             return;
         }
         particle.lifetime_remaining -= 1;
-        particle.size = rl.Clamp(
-            @as(f32, @floatFromInt(particleMaxSize * particle.lifetime_remaining / self.lifetime_max)),
-            1.0,
-            particleMaxSize);
+        particle.size = rl.Clamp(@as(f32, @floatFromInt(particleMaxSize * particle.lifetime_remaining / self.lifetime_max)), 1.0, particleMaxSize);
     }
-
 };
 
 // Reference: https://github.com/doccaico/raylib-examples-odin/blob/main/particle.odin
